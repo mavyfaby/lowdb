@@ -1,6 +1,6 @@
-# lowdb [![](http://img.shields.io/npm/dm/lowdb.svg?style=flat)](https://www.npmjs.org/package/lowdb) [![Node.js CI](https://github.com/typicode/lowdb/actions/workflows/node.js.yml/badge.svg)](https://github.com/typicode/lowdb/actions/workflows/node.js.yml)
+# lowdb-cjs [![](http://img.shields.io/npm/dm/lowdb.svg?style=flat)](https://www.npmjs.org/package/lowdb) [![Node.js CI](https://github.com/typicode/lowdb/actions/workflows/node.js.yml/badge.svg)](https://github.com/typicode/lowdb/actions/workflows/node.js.yml)
 
-> Simple to use local JSON database 🦉
+> Tiny local JSON database for small projects 🦉
 
 ```js
 // This is pure JS, not specific to lowdb ;)
@@ -53,17 +53,17 @@ Please help me build OSS 👉 [GitHub Sponsors](https://github.com/sponsors/typi
 ## Install
 
 ```sh
-npm install lowdb
+npm install lowdb-cjs
 ```
 
 ## Usage
 
-_Lowdb 3 is a pure ESM package. If you're having trouble importing it in your project, please [read this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)._
+_Forked Lowdb 2 is a pure CommonJS package._
 
 ```js
-import { join, dirname } from 'path'
-import { Low, JSONFile } from 'lowdb'
-import { fileURLToPath } from 'url'
+const { join, dirname } = require('path')
+const { Low, JSONFile } = require('lowdb-cjs')
+const { fileURLToPath } = require('url')
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -77,8 +77,8 @@ await db.read()
 
 // If file.json doesn't exist, db.data will be null
 // Set default data
-// db.data = db.data || { posts: [] } // Node < v15.x
-db.data ||= { posts: [] }             // Node >= 15.x
+db.data ||= { posts: [] }
+// db.data = db.data || { posts: [] } // for node < v15.x
 
 // Create and query items using plain JS
 db.data.posts.push('hello world')
@@ -120,7 +120,7 @@ db.data
 You can easily add lodash or other utility libraries to improve lowdb.
 
 ```js
-import lodash from 'lodash'
+const lodash = require('lodash');
 
 // ...
 // Note: db.data needs to be initialized before lodash.chain is called.
@@ -135,7 +135,7 @@ const post = db.chain
 
 ### More examples
 
-For CLI, server and browser usage, see [`examples/`](/examples) directory.
+For CLI, server and browser usage, see [`examples/`](https://github.com/typicode/lowdb/tree/main/examples) directory.
 
 ## API
 
@@ -146,7 +146,7 @@ Lowdb has two classes (for asynchronous and synchronous adapters).
 #### `new Low(adapter)`
 
 ```js
-import { Low, JSONFile } from 'lowdb'
+const { Low, JSONFile } = require('lowdb-cjs')
 
 const db = new Low(new JSONFile('file.json'))
 await db.read()
@@ -156,7 +156,7 @@ await db.write()
 #### `new LowSync(adapterSync)`
 
 ```js
-import { LowSync, JSONFileSync } from 'lowdb'
+const { LowSync, JSONFileSync } = require('lowdb-cjs')
 
 const db = new LowSync(new JSONFileSync('file.json'))
 db.read()
@@ -261,7 +261,7 @@ class SyncAdapter {
 For example, let's say you have some async storage and want to create an adapter for it:
 
 ```js
-import { api } from './AsyncStorage'
+const { api } = require('./AsyncStorage');
 
 class CustomAsyncAdapter {
   // Optional: your adapter can take arguments
@@ -283,7 +283,7 @@ const adapter = new CustomAsyncAdapter()
 const db = new Low(adapter)
 ```
 
-See [`src/adapters/`](src/adapters) for more examples.
+See [`lib/adapters/`](/lib/adapters) for more examples.
 
 #### Custom serialization
 
@@ -292,8 +292,8 @@ To create an adapter for another format than JSON, you can use `TextFile` or `Te
 For example:
 
 ```js
-import { Adapter, Low, TextFile } from 'lowdb'
-import YAML from 'yaml'
+const { Adapter, Low, TextFile } = require('lowdb-cjs')
+const YAML = require('yaml')
 
 class YAMLFile {
   constructor(filename) {
